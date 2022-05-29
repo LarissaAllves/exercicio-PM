@@ -1,6 +1,6 @@
 import { useFocusEffect } from "@react-navigation/native";
 import React, { useCallback, useEffect, useState } from "react";
-import { View, StyleSheet, Text, AsyncStorage } from "react-native";
+import { View, StyleSheet, Text, AsyncStorage, ScrollView } from "react-native";
 import { Header } from "../../components/Header";
 
 interface ListTelephonyProps {
@@ -50,6 +50,13 @@ export function ListTotal() {
       0
     );
   }
+  function totLines(lines: string) {
+    return listTotal.reduce(
+      (totalLines, number) =>
+        number.mLine.includes(lines) ? (totalLines += 1) : (totalLines += 0),
+      0
+    );
+  }
 
   function totNumberDD(dd: string) {
     return listTotal.reduce(
@@ -78,30 +85,42 @@ export function ListTotal() {
   );
 
   return (
-    <View>
-      <Header title="Total de Linhas Cadastradas" />
-      <View style={styles.card}>
-        <Text style={styles.titleCard}>Total de Linhas</Text>
-        <Text style={styles.textCard}>
-          Operadora Vivo: {totOperator("Vivo")}{" "}
-        </Text>
-        <Text style={styles.textCard}>
-          Operadora Claro: {totOperator("Claro")}
-        </Text>
-        <Text style={styles.textCard}>Operadora Tim: {totOperator("Tim")}</Text>
-        <Text style={styles.textCard}>Operadora Oi: {totOperator("Oi")} </Text>
+    <ScrollView>
+      <View>
+        <Header title="Total" />
+        <View style={styles.card}>
+          <Text style={styles.titleCard}>Total de Linhas</Text>
+          <Text style={styles.textCard}>Total de linhas: {totLines("")}</Text>
+          <Text style={styles.titleCard}>Total de Linhas por Operadora</Text>
+          <Text style={styles.textCard}>
+            Operadora Vivo: {totOperator("Vivo")}
+          </Text>
+          <Text style={styles.textCard}>
+            Operadora Claro: {totOperator("Claro")}
+          </Text>
+          <Text style={styles.textCard}>
+            Operadora Tim: {totOperator("Tim")}
+          </Text>
+          <Text style={styles.textCard}>
+            Operadora Oi: {totOperator("Oi")}{" "}
+          </Text>
+        </View>
+        <View style={styles.card}>
+          <Text style={styles.titleCard}>Total de DD's</Text>
+          <Text style={styles.textCard}>DD 24: {totNumberDD("24")} </Text>
+          <Text style={styles.textCard}>DD 31: {totNumberDD("31")} </Text>
+        </View>
+        <View style={styles.card}>
+          <Text style={styles.titleCard}>Total de Planos</Text>
+          <Text style={styles.textCard}>
+            Planos 10gb: {totDataPlan("10gb")}{" "}
+          </Text>
+          <Text style={styles.textCard}>
+            Planos 20gb: {totDataPlan("20gb")}{" "}
+          </Text>
+        </View>
       </View>
-      <View style={styles.card}>
-        <Text style={styles.titleCard}>Total de DD's</Text>
-        <Text style={styles.textCard}>DD 24: {totNumberDD("24")} </Text>
-        <Text style={styles.textCard}>DD 31: {totNumberDD("31")} </Text>
-      </View>
-      <View style={styles.card}>
-        <Text style={styles.titleCard}>Total de Planos</Text>
-        <Text style={styles.textCard}>Planos 10gb: {totDataPlan("10gb")} </Text>
-        <Text style={styles.textCard}>Planos 20gb: {totDataPlan("20gb")} </Text>
-      </View>
-    </View>
+    </ScrollView>
   );
 }
 export const styles = StyleSheet.create({
